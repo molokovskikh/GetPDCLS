@@ -1,24 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Common;
 using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Security.AccessControl;
 using System.Security.Principal;
-using ADOX;
 
-using SharpCompress.Archive;
 using SharpCompress.Archive.GZip;
-using SharpCompress.Archive.Rar;
 using SharpCompress.Common;
-using SharpCompress.Compressor;
-using SharpCompress.Compressor.Deflate;
 
 namespace MarkTrade
 {
@@ -200,7 +193,7 @@ namespace MarkTrade
                 }
             }
 
-	    string tmp_file = Path.Combine(_dir, "lp.xls");
+	       string tmp_file = Path.Combine(_dir, "lp.xls");
             if (File.Exists(tmp_file))
                 File.Delete(tmp_file);
             
@@ -215,19 +208,19 @@ namespace MarkTrade
                 File.Delete(tmp_file);
 
             File.WriteAllBytes(tmp_file,raw);
-
+            
             return string.Format("Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};Extended Properties=Excel 8.0", tmp_file);
         }
 
 
-private bool GrantAccess(string fullPath)
-{
-    DirectoryInfo dInfo = new DirectoryInfo(fullPath);
-    DirectorySecurity dSecurity = dInfo.GetAccessControl();
-    dSecurity.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), FileSystemRights.FullControl, InheritanceFlags.ObjectInherit | InheritanceFlags.ContainerInherit, PropagationFlags.NoPropagateInherit, AccessControlType.Allow));
-    dInfo.SetAccessControl(dSecurity);
-    return true;
-}
+        private bool GrantAccess(string fullPath)
+        {
+            DirectoryInfo dInfo = new DirectoryInfo(fullPath);
+            DirectorySecurity dSecurity = dInfo.GetAccessControl();
+            dSecurity.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), FileSystemRights.FullControl, InheritanceFlags.ObjectInherit | InheritanceFlags.ContainerInherit, PropagationFlags.NoPropagateInherit, AccessControlType.Allow));
+            dInfo.SetAccessControl(dSecurity);
+            return true;
+        }
 
         private void CreateMde2(DataTable dataImport)
         {
@@ -251,6 +244,8 @@ private bool GrantAccess(string fullPath)
 
                     for (int i = 0; i < dataImport.Rows.Count; i++)
                     {
+                        if(dataImport.Rows[i][0]==null || string.IsNullOrEmpty(dataImport.Rows[i][0].ToString())) continue;
+
                         string query = string.Format(System.Globalization.CultureInfo.InvariantCulture, @"
 INSERT INTO {0} (N, Наименование, Форма, [В упаковке], Производитель, [Штрих-код], Регистрация, Цена, [Цена руб], [Код производителя], МНН, [Цена УЕ], УЕ, [Действует?], [Дата обновления], [Снято с регистрации], [Дата регистрации], D)
 VALUES (NULL,'{2}','{3}','{5}','{4}',{10},'{8} от {9}','{6:0,00} Руб',{6:0.00},0,'{1}',{6:0.00},'Руб',0,#{11}#,0,NULL,1)",
@@ -284,7 +279,7 @@ VALUES (NULL,'{2}','{3}','{5}','{4}',{10},'{8} от {9}','{6:0,00} Руб',{6:0.
             }
         }
 
-
+        /*
 
         private byte[] CreateMde(DataTable dataImport)
         {
@@ -444,44 +439,45 @@ VALUES (NULL,'{2}','{3}','{5}','{4}',{10},'{8} от {9}','{6:0,00} Руб',{6:0.
             return result;
         }
 
-        private bool IsFile(string filename)
-        {
-            try
-            {
-                Path.GetFullPath(filename);
-                return true;
-            }
-            catch (Exception)
-            {
+        
+       private bool IsFile(string filename)
+       {
+           try
+           {
+               Path.GetFullPath(filename);
+               return true;
+           }
+           catch (Exception)
+           {
                                 
-            }
-            return false;
-        }
+           }
+           return false;
+       }
 
-        /*
-        private Stream PrepareDestination(string destination)
-        {
-            Stream result = null;
-            Uri uri = null;
-            if (IsFile(destination))
-            {
-                result = new FileStream(destination,FileMode.Create);
-            }
-            else 
-            if (Uri.TryCreate(destination, UriKind.Absolute, out uri))
-            {                               
-                if (uri.IsFile)
-                {
-                    result = new FileStream(destination, FileMode.Create);
-                }
-                else
-                {
-                    result = new UpdloadStream(uri);   
-                }
-            }
-            return result;
-        }
-        */
+       
+       private Stream PrepareDestination(string destination)
+       {
+           Stream result = null;
+           Uri uri = null;
+           if (IsFile(destination))
+           {
+               result = new FileStream(destination,FileMode.Create);
+           }
+           else 
+           if (Uri.TryCreate(destination, UriKind.Absolute, out uri))
+           {                               
+               if (uri.IsFile)
+               {
+                   result = new FileStream(destination, FileMode.Create);
+               }
+               else
+               {
+                   result = new UpdloadStream(uri);   
+               }
+           }
+           return result;
+       }
+       */
 
         byte[] GetRawByFile(string filename)
         {

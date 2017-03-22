@@ -39,6 +39,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -48,7 +49,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.butLoop.Location = new System.Drawing.Point(304, 50);
             this.butLoop.Name = "butLoop";
-            this.butLoop.Size = new System.Drawing.Size(155, 23);
+            this.butLoop.Size = new System.Drawing.Size(159, 23);
             this.butLoop.TabIndex = 0;
             this.butLoop.Text = "Включить обновление";
             this.butLoop.UseVisualStyleBackColor = true;
@@ -61,7 +62,7 @@
             this.textBox1.Enabled = false;
             this.textBox1.Location = new System.Drawing.Point(97, 12);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(296, 20);
+            this.textBox1.Size = new System.Drawing.Size(300, 20);
             this.textBox1.TabIndex = 1;
             // 
             // numericUpDown1
@@ -96,7 +97,7 @@
             // 
             this.butChoise.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.butChoise.Enabled = false;
-            this.butChoise.Location = new System.Drawing.Point(399, 10);
+            this.butChoise.Location = new System.Drawing.Point(403, 10);
             this.butChoise.Name = "butChoise";
             this.butChoise.Size = new System.Drawing.Size(60, 23);
             this.butChoise.TabIndex = 3;
@@ -120,7 +121,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.butGetUrl.Location = new System.Drawing.Point(17, 85);
             this.butGetUrl.Name = "butGetUrl";
-            this.butGetUrl.Size = new System.Drawing.Size(442, 23);
+            this.butGetUrl.Size = new System.Drawing.Size(446, 23);
             this.butGetUrl.TabIndex = 5;
             this.butGetUrl.Text = "Получить ссылку";
             this.butGetUrl.UseVisualStyleBackColor = true;
@@ -147,11 +148,21 @@
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // progressBar1
+            // 
+            this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.progressBar1.Location = new System.Drawing.Point(4, 186);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(463, 23);
+            this.progressBar1.TabIndex = 8;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(465, 207);
+            this.ClientSize = new System.Drawing.Size(469, 212);
+            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.butGetUrl);
@@ -182,6 +193,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
+        private System.Windows.Forms.ProgressBar progressBar1;
     }
 }
 

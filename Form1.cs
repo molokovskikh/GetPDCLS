@@ -85,6 +85,11 @@ namespace GetPDCLS
 
         private void timer1_Tick(object sender, System.EventArgs e)
         {
+            if (label3.Text.Contains("Выполняется обновление"))
+            {
+                return;
+            }
+
             System.Threading.Thread _thread = new Thread(new ParameterizedThreadStart((o) =>
             {
                 try
@@ -94,12 +99,45 @@ namespace GetPDCLS
                         label3.Text += "\r\nВыполняется обновление...";
                     }));
 
+                    System.Timers.Timer timer = new System.Timers.Timer();
+                    timer.Interval = 300;
+                    timer.Elapsed += (s, et) => {
+                        this.progressBar1.BeginInvoke((Action)(() =>
+                        {
+                            this.progressBar1.Value = this.progressBar1.Value < 100 ? this.progressBar1.Value + 1 : 0;
+                        }));
+                    };
+                    this.progressBar1.BeginInvoke((Action)(() => this.progressBar1.Value = 0 ));
+
                     Converter _converter = new Converter(System.IO.Path.GetDirectoryName(o as string));
-                    _converter.Convert();
-                    this.label3.BeginInvoke((Action)(() =>
+                    timer.Start();
+                    try
                     {
-                        label3.Text = string.Format("Последний раз обновлялось: {0:dd.MM.yyyy HH:mm:ss}", DateTime.Now);
-                    }));
+                        _converter.Convert();
+                        this.label3.BeginInvoke((Action)(() =>
+                        {
+                            label3.Text = string.Format("Последний раз обновлялось: {0:dd.MM.yyyy HH:mm:ss}", DateTime.Now);
+                        }));
+                        
+                    }
+                    catch (Exception exc)
+                    {
+                        this.butLoop.BeginInvoke((Action)(() =>
+                        {
+                            this.butLoop.PerformClick();
+                        }));
+
+                        this.label3.BeginInvoke((Action)(() =>
+                        {
+                            label3.Text = "Возникла ошибка:\r\n"+exc.ToString();
+                        }));                                              
+                    }
+                    finally
+                    {
+                        timer.Stop();
+                        this.progressBar1.BeginInvoke((Action)(() => this.progressBar1.Value = 0));
+                    }
+                   
                 }
                 catch (Exception)
                 {
